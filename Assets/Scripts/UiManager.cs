@@ -23,6 +23,7 @@ public class UiManager : MonoBehaviour
 
         slider2.minValue = 100;
         slider2.maxValue = 1000;
+        //Debug.Log(Application.persistentDataPath);
     }
 
     // Update is called once per frame

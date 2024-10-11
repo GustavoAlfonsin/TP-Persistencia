@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,18 +11,23 @@ public class PersistenciaManager : MonoBehaviour
     public TMP_Dropdown saveDropdown;
     public Button saveButton;
     public Button loadButton;
+    public Button deleteButton;
 
     private List<int> savesList;
 
     private void Start()
     {
         // Cargar las partidas guardadas al inicio y llenar el Dropdown
-        savesList = SaveSystem.LoadSavesList();
+        //savesList = SaveSystem.LoadSavesList();
+
+        // Cargar las partidas guardadas con Json al inicio y llenar el Dropdown
+        savesList = SaveSystemJson.LoadSavesList2().listasPartidas;
         UpdateDropdown();
 
         // Configurar eventos de los botones
         saveButton.onClick.AddListener(OnSaveButtonClicked);
         loadButton.onClick.AddListener(OnLoadButtonClicked);
+        deleteButton.onClick.AddListener(OnDeleteButtonClicker);
 
         if (savesList.Count > 0)
         {
@@ -32,9 +38,12 @@ public class PersistenciaManager : MonoBehaviour
     // Llamado al hacer clic en el botón de guardar
     private void OnSaveButtonClicked()
     {
-        int saveID = savesList.Count + 1; // Generar nuevo ID para la partida
+        //int saveID = savesList.Count + 1; // Generar nuevo ID para la partida
+        int saveID = savesList.OrderByDescending(x => x).FirstOrDefault() + 1;
         Player.TriggerSave(uiManager.TMP_Dropdown.value, saveID);
-        savesList = SaveSystem.LoadSavesList(); // Actualizar la lista de partidas guardadas
+        //savesList = SaveSystem.LoadSavesList(); // Actualizar la lista de partidas guardadas
+        
+        savesList = SaveSystemJson.LoadSavesList2().listasPartidas; // Actualizar la lista de partidas guardadas en Json
         UpdateDropdown();
     }
 
@@ -43,6 +52,20 @@ public class PersistenciaManager : MonoBehaviour
     {
         int selectedSaveID = savesList[saveDropdown.value];
         Player.TriggerLoad(uiManager, selectedSaveID);
+    }
+
+    private void OnDeleteButtonClicker()
+    {
+        int selectedSaveID = savesList[saveDropdown.value];
+        Player.TriggerDelete(uiManager, selectedSaveID);
+
+        savesList = SaveSystemJson.LoadSavesList2().listasPartidas; // Actualizar la lista de partidas guardadas en Json
+        UpdateDropdown();
+
+        if (savesList.Count > 0)
+        {
+            Player.TriggerLoad(uiManager, savesList[savesList.Count - 1]); // Cargar la última partida
+        }
     }
 
     // Actualizar el Dropdown con las partidas guardadas

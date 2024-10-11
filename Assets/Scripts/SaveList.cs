@@ -14,3 +14,6 @@ public class SaveList
         listasPartidas = new List<int>();
     }
 }
+
+// Cree una nueva clase para las partidas guardadas por que Json no me dejaba guardar
+// directamente la lista de enteros

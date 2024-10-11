@@ -15,8 +15,8 @@ public static class SaveSystemJson
         string path = savePath + saveID + ".json";
         PlayerData data = new PlayerData(player, dropdownValue, saveID);
 
-        string cadenaJSON = JsonUtility.ToJson(data);
-        File.WriteAllText(path, cadenaJSON);
+        string cadenaJSON = JsonUtility.ToJson(data); //convierte los datos a un archivo Json
+        File.WriteAllText(path, cadenaJSON); //Llena el archivo
         //SaveSavesList(saveID);
         SaveSavesList2(saveID);
 
@@ -29,8 +29,8 @@ public static class SaveSystemJson
         string path = savePath + saveID + ".json";
         if (File.Exists(path))
         {
-            string contenido = File.ReadAllText(path);
-            PlayerData data = JsonUtility.FromJson<PlayerData>(contenido);
+            string contenido = File.ReadAllText(path); // Lee el contenido del archivo
+            PlayerData data = JsonUtility.FromJson<PlayerData>(contenido); // Lo pasa de un archivo Json a un objeto del tipo especificado
             return data;
         }
         else
@@ -46,8 +46,8 @@ public static class SaveSystemJson
         string path = savePath + saveID + ".json";
         if (File.Exists(path))
         {
-            File.Delete(path);
-            deleteSavesList(saveID);
+            File.Delete(path); // Elimina el archivo si existe
+            deleteSavesList(saveID); // Actualiza la lista de partidas
         }
         else
         {
@@ -67,10 +67,11 @@ public static class SaveSystemJson
                 savesList.RemoveAt(0);
             }
         }
-        string cadenaJson = JsonUtility.ToJson(savesList);
+        string cadenaJson = JsonUtility.ToJson(savesList); // NO SE GUARDAN LAS LISTAS EN JSON
         File.WriteAllText(listPath, cadenaJson);
     }
 
+    // Nueva funcion para guardar las partidas en un archivo Json
     private static void SaveSavesList2(int saveID)
     {
         SaveList saveList2 = LoadSavesList2() ?? new SaveList();
@@ -102,6 +103,7 @@ public static class SaveSystemJson
         }
     }
 
+    // Nueva función para cargar las partidas guardadas
     public static SaveList LoadSavesList2()
     {
         if (File.Exists(listPath))
@@ -117,13 +119,14 @@ public static class SaveSystemJson
         }
     }
 
+    // Función para actualizar la lista de partidas cuando es eliminada una
     private static void deleteSavesList(int saveID)
     {
         SaveList saveList = LoadSavesList2() ?? new SaveList();
         List<int> nuevaLista = new List<int>();
         foreach (int i in saveList.listasPartidas)
-        {
-            if(i != saveID)
+        { // Guarda aquellas partidas que no son las que se tienen que eliminar
+            if (i != saveID)
             {
                 nuevaLista.Add(i);
             }

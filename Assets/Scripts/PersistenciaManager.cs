@@ -27,7 +27,7 @@ public class PersistenciaManager : MonoBehaviour
         // Configurar eventos de los botones
         saveButton.onClick.AddListener(OnSaveButtonClicked);
         loadButton.onClick.AddListener(OnLoadButtonClicked);
-        deleteButton.onClick.AddListener(OnDeleteButtonClicker);
+        deleteButton.onClick.AddListener(OnDeleteButtonClicker); //boton de borrar
 
         if (savesList.Count > 0)
         {
@@ -39,7 +39,9 @@ public class PersistenciaManager : MonoBehaviour
     private void OnSaveButtonClicked()
     {
         //int saveID = savesList.Count + 1; // Generar nuevo ID para la partida
-        int saveID = savesList.OrderByDescending(x => x).FirstOrDefault() + 1;
+        // Cambie la forma de seleccionar el ID por que al borrar la partida habian problemas
+        // con el indice
+        int saveID = savesList.OrderByDescending(x => x).FirstOrDefault() + 1; 
         Player.TriggerSave(uiManager.TMP_Dropdown.value, saveID);
         //savesList = SaveSystem.LoadSavesList(); // Actualizar la lista de partidas guardadas
         
@@ -54,7 +56,7 @@ public class PersistenciaManager : MonoBehaviour
         Player.TriggerLoad(uiManager, selectedSaveID);
     }
 
-    private void OnDeleteButtonClicker()
+    private void OnDeleteButtonClicker() // funcion para borrar la partida
     {
         int selectedSaveID = savesList[saveDropdown.value];
         Player.TriggerDelete(uiManager, selectedSaveID);
@@ -62,7 +64,7 @@ public class PersistenciaManager : MonoBehaviour
         savesList = SaveSystemJson.LoadSavesList2().listasPartidas; // Actualizar la lista de partidas guardadas en Json
         UpdateDropdown();
 
-        if (savesList.Count > 0)
+        if (savesList.Count > 0) // carga la ultima partida de la lista
         {
             Player.TriggerLoad(uiManager, savesList[savesList.Count - 1]); // Cargar la última partida
         }

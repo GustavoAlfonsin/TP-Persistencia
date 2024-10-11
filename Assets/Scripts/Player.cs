@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
         Debug.Log("Juego guardado con ID: " + saveID);
     }
 
+    //función con el sistema Json
     public void SaveGame2(int dropdownValue, int saveID)
     {
         SaveSystemJson.SavePlayer(this, dropdownValue, saveID);
@@ -70,6 +71,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //función con el sistema Json
     public void LoadGame2(UiManager uiManager, int saveID)
     {
         PlayerData data = SaveSystemJson.LoadPlayer(saveID);
@@ -90,6 +92,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Función para borrar partidas
     public void DeleteGame(UiManager uiManager, int saveID)
     {
         SaveSystemJson.deleteGame(saveID);
@@ -105,6 +108,7 @@ public class Player : MonoBehaviour
     {
         OnLoad?.Invoke(uiManager, saveID);
     }
+
 
     public static void TriggerDelete(UiManager uiManager, int saveID)
     {
